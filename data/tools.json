@@ -1,0 +1,170 @@
+[
+  {
+    "id": "trd-31",
+    "name": "Tape Reel Designer 3D",
+    "short": "Tape Reel Designer",
+    "category": "3D DESIGN",
+    "categoryKey": "design",
+    "description": "テープリールの巻径・必要長・配置を設計し、機構を立体的に確認するツール。",
+    "image": "assets/tools/tape-reel.svg",
+    "bg": "#d51d6d",
+    "tag": "#f0568f",
+    "files": 12,
+    "updated": "2時間前",
+    "status": "READY",
+    "version": "2.1.0",
+    "recentFiles": [
+      "reel_design_v12.blend",
+      "test_winding_v7.blend",
+      "reel_param_0529.json"
+    ],
+    "launch": {
+      "enabled": true,
+      "type": "exe",
+      "target": "%LOCALAPPDATA%\\Programs\\Tape Reel Designer 3D\\TapeReelDesigner3D.exe",
+      "workingDirectory": "%LOCALAPPDATA%\\Programs\\Tape Reel Designer 3D",
+      "args": [],
+      "interpreter": ""
+    }
+  },
+  {
+    "id": "ptd-50",
+    "name": "Periodic Tape Designer",
+    "short": "Periodic Tape",
+    "category": "DATA / PROCESS",
+    "categoryKey": "process",
+    "description": "周期構造テープの送り、形状、周期長を設計して工程を可視化するツール。",
+    "image": "assets/tools/periodic-tape.svg",
+    "bg": "#0f6e86",
+    "tag": "#43c4d0",
+    "files": 8,
+    "updated": "昨日",
+    "status": "READY",
+    "version": "1.8.2",
+    "recentFiles": [
+      "periodic_shape_469mm.json",
+      "roller_profile.step",
+      "stroke_plan.csv"
+    ],
+    "launch": {
+      "enabled": true,
+      "type": "exe",
+      "target": "%LOCALAPPDATA%\\Programs\\TapeDesigner\\TapeDesigner.exe",
+      "workingDirectory": "%LOCALAPPDATA%\\Programs\\TapeDesigner",
+      "args": [],
+      "interpreter": ""
+    }
+  },
+  {
+    "id": "rps-09",
+    "name": "Radia to Python Studio",
+    "short": "Radia Studio",
+    "category": "SIMULATION",
+    "categoryKey": "analysis",
+    "description": "磁石配列と磁場線を確認しながら、Radia解析コードをPythonへ展開するツール。",
+    "image": "assets/tools/radia-studio.svg",
+    "bg": "#d59d00",
+    "tag": "#f3bf31",
+    "files": 16,
+    "updated": "3日前",
+    "status": "READY",
+    "version": "0.9.4",
+    "recentFiles": [
+      "undulator_model.py",
+      "field_scan_0624.csv",
+      "03_B_vector.pos"
+    ],
+    "launch": {
+      "enabled": false,
+      "type": "python",
+      "target": "",
+      "workingDirectory": "",
+      "args": [],
+      "interpreter": ""
+    }
+  },
+  {
+    "id": "mdi-10",
+    "name": "Model Interpreter",
+    "short": "Model Interpreter",
+    "category": "AI / VISUAL",
+    "categoryKey": "ai",
+    "description": "3Dモデル、画像、解析結果を読み解き、構造や特徴を視覚的に整理するツール。",
+    "image": "assets/tools/model-interpreter.svg",
+    "bg": "#c8c2b8",
+    "tag": "#b1aaa1",
+    "files": 9,
+    "updated": "5日前",
+    "status": "PROTOTYPE",
+    "version": "0.7.1",
+    "recentFiles": [
+      "coil_section.glb",
+      "inspection_notes.md",
+      "shape_features.json"
+    ],
+    "launch": {
+      "enabled": false,
+      "type": "url",
+      "target": "",
+      "workingDirectory": "",
+      "args": [],
+      "interpreter": ""
+    }
+  },
+  {
+    "id": "ptr-01",
+    "name": "Paper Translator",
+    "short": "Paper Translator",
+    "category": "DOCUMENT",
+    "categoryKey": "document",
+    "description": "論文・仕様書・会議資料を構造を保ったまま翻訳し、研究メモへつなげるツール。",
+    "image": "assets/tools/paper-translator.svg",
+    "bg": "#e16c36",
+    "tag": "#ff925e",
+    "files": 21,
+    "updated": "1週間前",
+    "status": "DEVELOPMENT",
+    "version": "0.5.0",
+    "recentFiles": [
+      "HTS_paper_ja.md",
+      "meeting_translation.docx",
+      "terms_dictionary.json"
+    ],
+    "launch": {
+      "enabled": false,
+      "type": "url",
+      "target": "",
+      "workingDirectory": "",
+      "args": [],
+      "interpreter": ""
+    }
+  },
+  {
+    "id": "ws-control",
+    "name": "Winding System Control",
+    "short": "WS Control",
+    "category": "CONTROL",
+    "categoryKey": "control",
+    "description": "巻線装置のモータ、押込み、供給量を管理する制御インターフェース。",
+    "image": "assets/tools/ws-control.svg",
+    "bg": "#2b7fa4",
+    "tag": "#56b6dc",
+    "files": 6,
+    "updated": "6日前",
+    "status": "HARDWARE",
+    "version": "1.2.6",
+    "recentFiles": [
+      "stage1_config.yaml",
+      "motor_profile.json",
+      "device_log.txt"
+    ],
+    "launch": {
+      "enabled": false,
+      "type": "powershell",
+      "target": "",
+      "workingDirectory": "",
+      "args": [],
+      "interpreter": ""
+    }
+  }
+]

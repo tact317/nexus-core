@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a09" />
+  <meta name="description" content="NEXUS CORE v1.20.0 - シネマティック短編起動映像を備えた研究ツール統合ハブ" />
+  <title>NEXUS CORE | Street Research Hub v1.20.0</title>
+  <link rel="icon" href="assets/icons/nexus-mark.svg" type="image/svg+xml" />
+  <link rel="preload" as="image" href="assets/video/nexus_cinematic_wall_start_v3.jpg" />
+  <style>
+    html,body{margin:0;min-height:100%;background:#0a0a09}
+    body.intro-active{overflow:hidden;background:#0a0a09}
+    .painted-intro{position:fixed;inset:0;z-index:10000;background:#0a0a09 url("assets/video/nexus_cinematic_wall_start_v3.jpg") center/cover no-repeat}
+    html.intro-off .painted-intro{display:none!important}
+    html.intro-off body,html.intro-off .app-shell{background:#ece7dc}
+  </style>
+  <script>
+    try {
+      const mode=localStorage.getItem("nexusIntroMode");
+      const legacy=localStorage.getItem("nexusShowIntro");
+      if(mode==="off"||(!mode&&legacy==="false")) document.documentElement.classList.add("intro-off");
+    } catch (_) {}
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="intro-active">
+  <section class="painted-intro cinema-opening" id="paintedIntro" aria-label="NEXUS CORE シネマティック起動映像">
+    <div class="cinema-stage">
+      <video class="cinema-video" id="introVideo" preload="auto" muted playsinline poster="assets/video/nexus_cinematic_wall_start_v3.jpg">
+        <source src="assets/video/nexus_cinematic_wall_opening_v3.mp4" type="video/mp4" />
+      </video>
+      <div class="cinema-gate" aria-hidden="true">
+        <div class="cinema-gate-panel cinema-gate-left"></div>
+        <div class="cinema-gate-panel cinema-gate-right"></div>
+      </div>
+      <div class="cinema-progress" aria-hidden="true"><i id="introProgress"></i></div>
+    </div>
+    <button class="cinema-play" id="introStart" type="button">
+      <span>PLAY FILM</span>
+      <small>クリックして再生</small>
+    </button>
+    <div class="cinema-controls" aria-label="起動映像の操作">
+      <button class="cinema-sound" id="introSound" type="button" aria-pressed="false">SOUND OFF</button>
+      <span class="cinema-mode-badge" id="introModeBadge">FULL FILM</span>
+      <button class="cinema-skip" id="introSkip" type="button">SKIP</button>
+    </div>
+  </section>
+
+  <div class="app-shell" id="appShell">
+    <aside class="rail" aria-label="メインナビゲーション">
+      <button class="brand-mini" data-route="home" aria-label="ホームへ">
+        <span class="brand-crown">⌁</span>
+        <span>NC</span>
+      </button>
+      <nav class="rail-nav" id="railNav"></nav>
+      <div class="rail-splatter" aria-hidden="true"></div>
+      <button class="profile-button" id="profileButton" aria-label="プロフィール">
+        <span class="profile-avatar">R</span>
+        <span class="profile-status"></span>
+      </button>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="メニューを開く">☰</button>
+        <a class="wordmark" href="#home" aria-label="NEXUS CORE ホーム">
+          <span class="crown-mark">♕</span>
+          <span>NEXUS CORE</span>
+        </a>
+        <button class="search-box" id="openSearch" aria-label="検索を開く">
+          <span class="search-icon">⌕</span>
+          <span>ツール、プロジェクト、メモを検索...</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <div class="top-actions">
+          <button class="icon-button" id="motionToggle" aria-label="モーション設定" title="モーション設定">↝</button>
+          <button class="icon-button notification-button" id="notificationButton" aria-label="通知">♟<span>3</span></button>
+          <button class="icon-button" id="helpButton" aria-label="ヘルプ">?</button>
+        </div>
+      </header>
+
+      <section class="route-stage" id="routeStage" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <div class="command-layer" id="commandLayer" hidden>
+    <div class="command-backdrop" data-close-command></div>
+    <section class="command-dialog" role="dialog" aria-modal="true" aria-label="コマンド検索">
+      <header>
+        <span>⌕</span>
+        <input id="commandInput" type="search" placeholder="ツール、プロジェクト、メモ、操作を検索" autocomplete="off" />
+        <kbd>Esc</kbd>
+      </header>
+      <div class="command-results" id="commandResults"></div>
+    </section>
+  </div>
+
+  <div class="drawer-layer" id="drawerLayer" hidden>
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <aside class="detail-drawer" id="detailDrawer" aria-live="polite"></aside>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+  <template id="homeTemplate">
+    <div class="home-page page-enter">
+      <section class="hero-board paper-panel live-collage-hero" aria-labelledby="heroTitle">
+        <div class="hero-grain" aria-hidden="true"></div>
+        <div class="hero-spray hero-spray-pink" aria-hidden="true"></div>
+        <div class="hero-spray hero-spray-cyan" aria-hidden="true"></div>
+
+        <div class="hero-brand-lockup" aria-label="NEXUS CORE">
+          <span class="hero-crown">♛</span>
+          <div><strong>NEXUS CORE</strong><small>CURIOSITY IS REBELLION.</small></div>
+          <b>v1.20.0</b>
+        </div>
+
+        <div class="hero-title-block">
+          <h1 id="heroTitle" class="visually-hidden">ひらめき動き出す研究ハブ</h1>
+          <img class="hero-title-art" src="assets/hero/hero-title-v16.png" alt="ひらめき動き出す 研究ハブ" draggable="false" />
+          <p>つなぐ、試す、形にする。アイデアは、<strong>ここから世界を変える。</strong></p>
+        </div>
+
+        <img class="hero-person hero-person-left" src="assets/hero/researcher-left.png" alt="問いを投げかける研究者のステンシルシルエット" draggable="false" />
+        <img class="hero-person hero-person-right" src="assets/hero/researcher-right-spray.png" alt="壁にアイデアを書く研究者とシアンのスプレー表現" draggable="false" />
+
+        <svg class="hero-flow-svg" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+          <path class="hero-brush-arc hero-brush-arc-shadow" d="M500 165 C650 78 860 111 922 273 C968 394 888 500 719 510" />
+          <path class="hero-brush-arc" d="M500 165 C650 78 860 111 922 273 C968 394 888 500 719 510" />
+          <path class="hero-flow-line hero-flow-line-a" d="M334 420 C403 395 438 351 494 329" />
+          <path class="hero-flow-line hero-flow-line-b" d="M825 253 C915 255 968 278 1018 315" />
+          <path class="hero-flow-line hero-flow-line-c" d="M735 483 C815 492 855 470 899 438" />
+          <path class="hero-flow-arrow hero-flow-arrow-a" d="M485 317 L505 329 L487 344" />
+          <path class="hero-flow-arrow hero-flow-arrow-b" d="M1001 301 L1020 315 L997 324" />
+          <path class="hero-flow-arrow hero-flow-arrow-c" d="M883 426 L901 438 L883 451" />
+        </svg>
+
+        <button class="hero-motion-mark" id="ideaRing" type="button" data-action="cycle-hero" aria-live="polite" aria-label="中央メッセージを切り替える">
+          <span>MAKE</span><span>TEST</span><span>LEARN</span>
+        </button>
+        <p class="hero-fidelity-badge" id="heroSlideMessage">試して、壊して、また組み直す。</p>
+        <p class="hero-mantra">CURIOSITY IS<br><strong>REBELLION.</strong></p>
+        <p class="hero-small-steps">Small steps.<br>Large impact.</p>
+
+        <button class="hero-note hero-note-explore" data-hero-action="explore">
+          <strong>EXPLORE</strong><span>問いを立てる →</span>
+        </button>
+        <button class="hero-note hero-note-connect" data-hero-action="connect">
+          <strong>CONNECT</strong><span>つなげる →</span>
+        </button>
+        <button class="hero-note hero-note-create" data-hero-action="create">
+          <strong>CREATE</strong><span>形にする →</span>
+        </button>
+
+        <div class="hero-pagination live-pagination" id="heroPagination"></div>
+      </section>
+
+      <section class="quick-panel paper-panel">
+        <header class="section-heading quick-heading">
+          <div><h2>QUICK LAUNCH</h2><p>よく使う操作を一発で。</p></div>
+          <span class="go-sticker">GO!</span>
+        </header>
+        <div class="quick-grid" id="quickGrid"></div>
+      </section>
+
+      <section class="workspace-pulse paper-panel" id="workspacePulse" aria-label="現在のワークスペース状況"></section>
+
+      <section class="tool-board paper-panel">
+        <header class="section-heading tools-heading">
+          <div>
+            <h2>TOOLS <small>v1.20.0</small></h2>
+            <p>ドラッグして並べ替え。クリックで中身を見る。</p>
+          </div>
+          <div class="tools-heading-actions">
+            <span class="drag-label">DRAG &amp; DROP<br>TO REORDER</span>
+            <button class="text-button" data-route="tools">すべて見る →</button>
+          </div>
+        </header>
+        <div class="tool-strip" id="homeToolStrip"></div>
+      </section>
+
+      <section class="project-panel paper-panel">
+        <header class="section-heading">
+          <div><h2>PROJECT ATLAS</h2><p>研究の現在地。</p></div>
+          <button class="text-button" data-route="projects">すべて見る →</button>
+        </header>
+        <div class="project-list" id="homeProjectList"></div>
+        <button class="dashed-action" data-action="new-project">＋ 新しいプロジェクトを作成</button>
+      </section>
+
+      <section class="notes-panel paper-panel">
+        <header class="section-heading">
+          <div><h2>RESEARCH NOTES</h2><p>忘れたくない発見。</p></div>
+          <button class="text-button" data-route="notes">すべて見る →</button>
+        </header>
+        <div class="notes-status-row"><span class="pinned-label">PINNED</span><span>重要な発見を上に固定</span></div>
+        <div class="note-list" id="homeNoteList"></div>
+        <footer class="notes-footer"><div class="corner-note">THOUGHTS<br>BECOME<br><span>BLUEPRINTS.</span></div></footer>
+      </section>
+
+      <footer class="manifesto-strip paper-panel">
+        <button class="question-sticker" data-action="random-prompt">QUESTION<br>EVERYTHING</button>
+        <blockquote>「未来は、つくる側の遊び心で決まる。」<cite>— NEXUS CORE MANIFESTO</cite></blockquote>
+        <div class="weather-block"><span>☁</span><strong>23°C</strong><small>Osaka</small></div>
+        <div class="date-block"><small id="footerWeekday">FRI</small><strong id="footerDate">31</strong><span id="footerMonth">JUL</span></div>
+        <span class="make-sticker">MAKE<br>IT.<br>COUNT.</span>
+      </footer>
+    </div>
+  </template>
+
+  <template id="toolsTemplate">
+    <div class="tools-page page-enter">
+      <header class="page-header paper-panel">
+        <div><span class="page-kicker">WORKSHOP / 01</span><h1>TOOLS WALL</h1><p>作った道具を、使える形で並べる。</p></div>
+        <button class="spray-button" data-action="add-tool">＋ TOOL</button>
+      </header>
+      <section class="filter-bar paper-panel">
+        <div class="filter-chips" id="toolFilterChips"></div>
+        <label class="inline-search"><span>⌕</span><input id="toolSearch" type="search" placeholder="ツール名・カテゴリで検索" /></label>
+        <div class="tool-result-controls">
+          <strong id="toolResultCount">0 TOOLS</strong>
+          <label>並び順
+            <select id="toolSort" aria-label="ツールの並び順">
+              <option value="manual">自由配置</option>
+              <option value="name">名前順</option>
+              <option value="category">カテゴリ順</option>
+              <option value="updated">更新順</option>
+            </select>
+          </label>
+        </div>
+      </section>
+      <p class="tool-sort-hint" id="toolSortHint">カードをドラッグして、自分の使いやすい順へ並べ替えられます。</p>
+      <section class="full-tool-grid" id="fullToolGrid" aria-live="polite"></section>
+    </div>
+  </template>
+
+  <template id="projectsTemplate">
+    <div class="projects-page page-enter">
+      <header class="page-header paper-panel">
+        <div><span class="page-kicker">MAP / 02</span><h1>PROJECT ATLAS</h1><p>研究、装置、ツール、資料のつながりを見渡す。</p></div>
+        <div class="atlas-actions"><button data-action="atlas-reset">RESET</button><button data-action="new-project">＋ PROJECT</button></div>
+      </header>
+      <section class="page-purpose paper-panel" aria-label="Project Atlasの説明">
+        <strong>このページでできること</strong>
+        <p>研究プロジェクトごとに、関連するツール・資料・メモを一つの地図へまとめます。上のプロジェクトを切り替えると、その研究に必要な道具だけが表示されます。</p>
+      </section>
+      <section class="project-switcher paper-panel" id="projectSwitcher" aria-label="プロジェクト選択"></section>
+      <section class="project-workspace-panel paper-panel" id="projectWorkspacePanel" aria-label="プロジェクトの実データ"></section>
+      <section class="atlas-board paper-panel" id="atlasBoard">
+        <div class="atlas-toolbar">
+          <span>ドラッグで移動</span><span>ホイールで拡大縮小</span>
+          <div class="atlas-legend" aria-label="関係線の凡例"><i class="major"></i>主要接続 <i class="minor"></i>関連ツール</div>
+          <div class="atlas-zoom-actions"><button data-action="atlas-zoom-out" aria-label="縮小">−</button><button data-action="atlas-zoom-in" aria-label="拡大">＋</button></div>
+          <strong id="atlasZoomLabel">100%</strong>
+        </div>
+        <div class="atlas-viewport" id="atlasViewport">
+          <svg class="atlas-lines" id="atlasLines" aria-hidden="true"></svg>
+          <div class="atlas-world" id="atlasWorld"></div>
+          <div class="atlas-corner-note atlas-note-a">RELATIONSHIPS<br><span>LEAVE TRACES.</span></div>
+          <div class="atlas-corner-note atlas-note-b">FOLLOW THE<br><span>RED THREAD →</span></div>
+          <div class="atlas-stamp">WORK IN<br>PROGRESS</div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template id="notesTemplate">
+    <div class="notes-page page-enter">
+      <header class="page-header paper-panel">
+        <div><span class="page-kicker">MEMORY / 03</span><h1>RESEARCH NOTES</h1><p>考え、違和感、次の一手を貼っておく。</p></div>
+        <button class="spray-button" data-action="new-note">＋ NOTE</button>
+      </header>
+      <section class="page-purpose paper-panel" aria-label="Research Notesの説明">
+        <strong>このページでできること</strong>
+        <p>研究中に出たアイデア、違和感、次に確認することを保存します。メモは編集・削除・ピン留めでき、プロジェクトにも関連付けられます。</p>
+      </section>
+      <section class="notes-toolbar paper-panel" aria-label="メモの表示条件">
+        <div class="note-filter-chips"><button class="active" data-note-filter="all">すべて</button><button data-note-filter="pinned">ピン留め</button><button data-note-filter="recent">最近</button></div>
+        <strong id="noteResultCount">0 NOTES</strong>
+      </section>
+      <section class="note-board" id="noteBoard" aria-live="polite"></section>
+    </div>
+  </template>
+
+  <template id="genericTemplate">
+    <div class="generic-page page-enter">
+      <section class="generic-board paper-panel">
+        <div class="generic-number" id="genericNumber">04</div>
+        <div class="generic-copy"><span class="page-kicker" id="genericKicker">SHARED SPACE</span><h1 id="genericTitle">SHARED</h1><p id="genericDescription"></p></div>
+        <div class="generic-art"><span>BUILD</span><span>TOGETHER</span><i></i></div>
+      </section>
+      <section class="generic-grid" id="genericGrid"></section>
+    </div>
+  </template>
+
+
+  <template id="guideTemplate">
+    <div class="guide-page page-enter">
+      <header class="page-header paper-panel">
+        <div><span class="page-kicker">START HERE / 05</span><h1>APP GUIDE</h1><p>各ページの役割と、今できることを整理する。</p></div>
+        <span class="guide-stamp">NO MORE<br>GUESSING.</span>
+      </header>
+      <section class="guide-intro paper-panel">
+        <h2>NEXUS COREは何をするアプリ？</h2>
+        <p>研究用に作った複数のアプリを登録・起動し、研究プロジェクト、メモ、使用履歴を一つの入口から管理するためのハブです。</p>
+      </section>
+      <section class="guide-grid">
+        <article class="guide-card" style="--guide:#ec2f79"><span>01</span><h2>HOME</h2><p>起動履歴、実行中ツール、注意事項、進行中プロジェクト、重要メモを実データで確認する入口。</p><button data-route="home">HOMEを開く</button></article>
+        <article class="guide-card" style="--guide:#2fb7cb"><span>02</span><h2>TOOLS</h2><p>アプリを登録・編集・起動する場所。今後作るアプリも「＋ TOOL」から追加できます。</p><button data-route="tools">TOOLSを開く</button></article>
+        <article class="guide-card" style="--guide:#f3bf31"><span>03</span><h2>PROJECT ATLAS</h2><p>研究テーマごとにツール、ファイル、フォルダー、成果物、メモをまとめ、実際の保存場所を開くページ。</p><button data-route="projects">ATLASを開く</button></article>
+        <article class="guide-card" style="--guide:#39a879"><span>04</span><h2>RESEARCH NOTES</h2><p>アイデアや次に確認することを保存。横断検索、編集、削除、ピン留め、プロジェクト関連付けに対応。</p><button data-route="notes">NOTESを開く</button></article>
+        <article class="guide-card" style="--guide:#8d72c5"><span>05</span><h2>SETTINGS</h2><p>表示設定、起動中アプリ、履歴、データ保存先、バックアップ、パス切れを管理。</p><button data-route="settings">SETTINGSを開く</button></article>
+      </section>
+      <section class="guide-future paper-panel">
+        <h2>EXE化した後もアプリを追加できる？</h2>
+        <p><strong>できます。</strong> ツール設定はEXE本体ではなくWindowsのユーザーデータ領域へ保存されます。新しいアプリ完成後に「＋ TOOL」でEXEやスクリプトを登録すれば、再ビルドせず追加できます。</p>
+      </section>
+    </div>
+  </template>
+
+  <template id="settingsTemplate">
+    <div class="settings-page page-enter">
+      <header class="page-header paper-panel settings-header">
+        <div><span class="page-kicker">CONTROL / 06</span><h1>SETTINGS LAB</h1><p>見た目と動きも、研究道具の一部として調整する。</p></div>
+        <div class="settings-stamp">MAKE IT<br>YOURS.</div>
+      </header>
+      <section class="settings-layout">
+        <article class="settings-sheet paper-panel">
+          <header><span class="settings-number">01</span><div><h2>MOTION</h2><p>紙、カード、インクの反応を調整。</p></div></header>
+          <label class="switch-row"><span><strong>動的UI</strong><small>ホバー、ページ遷移、紙の揺れ</small></span><input id="settingMotion" type="checkbox"><i></i></label>
+          <label class="range-row"><span><strong>動きの強さ</strong><small id="motionLevelLabel">STANDARD</small></span><input id="settingMotionLevel" type="range" min="0" max="2" step="1"></label>
+          <label class="switch-row"><span><strong>クリック時のインク反応</strong><small>操作位置へ短いスプレー反応</small></span><input id="settingInkBurst" type="checkbox"><i></i></label>
+          <div class="choice-row intro-mode-row"><span><strong>起動イントロ</strong><small>初回は完全版。未指定の場合、2回目以降はQUICKになります。</small></span><div class="intro-mode-choices"><button type="button" data-intro-mode="full">FULL</button><button type="button" data-intro-mode="quick">QUICK</button><button type="button" data-intro-mode="off">OFF</button></div></div>
+          <button class="replay-intro" data-action="replay-intro">▶ FULL INTROをもう一度見る</button>
+        </article>
+        <article class="settings-sheet paper-panel">
+          <header><span class="settings-number">02</span><div><h2>SURFACE</h2><p>紙の質感と情報密度を調整。</p></div></header>
+          <label class="switch-row"><span><strong>紙テクスチャ</strong><small>コンクリートと紙の粒状感</small></span><input id="settingTexture" type="checkbox"><i></i></label>
+          <div class="choice-row"><span><strong>表示密度</strong><small>カード間隔と情報量</small></span><div><button data-density="comfortable">COMFORT</button><button data-density="compact">COMPACT</button></div></div>
+          <div class="choice-row"><span><strong>アクセント</strong><small>主役となるスプレーカラー</small></span><div class="accent-choices"><button data-accent="pink" aria-label="ピンク"></button><button data-accent="cyan" aria-label="シアン"></button><button data-accent="yellow" aria-label="イエロー"></button></div></div>
+        </article>
+        <article class="settings-sheet paper-panel bridge-sheet">
+          <header><span class="settings-number">03</span><div><h2>LAUNCH BRIDGE</h2><p>ローカルアプリの登録、起動、履歴。</p></div></header>
+          <div class="bridge-status-card"><span id="bridgeStatus">CHECKING</span><strong id="bridgeToolCount">0 / 0 CONFIGURED</strong><small>127.0.0.1 only / local workspace</small></div>
+          <div class="bridge-actions"><button data-action="add-tool">＋ REGISTER TOOL</button><button data-action="open-data-folder">OPEN DATA FOLDER</button><button data-action="refresh-runtime">REFRESH</button></div>
+          <div class="bridge-processes"><h3>RUNNING APPS</h3><div id="bridgeProcesses"><p>現在NEXUSから起動中のアプリはありません。</p></div></div>
+          <div class="bridge-history"><h3>RECENT LAUNCHES</h3><div id="bridgeHistory"><p>起動履歴はまだありません。</p></div></div>
+        </article>
+        <article class="settings-sheet paper-panel portability-sheet">
+          <header><span class="settings-number">04</span><div><h2>PORTABILITY</h2><p>EXE化や更新後も設定を残す。</p></div></header>
+          <div class="portability-copy"><strong>追加したアプリは外部データ領域へ保存</strong><p>本体を更新したりEXE化しても、ツール登録・プロジェクト・メモは消えません。バックアップZIPから別PCへ復元できます。</p><small id="dataRootLabel">DATA ROOT: CHECKING...</small></div>
+          <div class="bridge-actions portability-actions"><button data-action="create-backup">CREATE BACKUP</button><button data-action="restore-backup">RESTORE BACKUP</button><button data-action="open-backup-folder">OPEN BACKUPS</button></div>
+        </article>
+        <article class="settings-sheet paper-panel settings-preview-sheet">
+          <header><span class="settings-number">05</span><div><h2>LIVE PREVIEW</h2><p>設定はその場で反映される。</p></div></header>
+          <div class="settings-preview-card">
+            <span class="preview-tape"></span>
+            <div class="preview-splatter"></div>
+            <strong>IDEAS<br>IN MOTION</strong>
+            <button type="button">TOUCH ME</button>
+          </div>
+          <button class="reset-preferences" data-action="reset-preferences">RESET TO DEFAULT</button>
+        </article>
+      </section>
+    </div>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

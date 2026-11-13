@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 390">
+  <defs><radialGradient id="g"><stop offset="0" stop-color="#f5d84c"/><stop offset=".45" stop-color="#8f6b00"/><stop offset="1" stop-color="#16130b"/></radialGradient><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <rect width="640" height="390" fill="#17130b"/>
+  <circle cx="320" cy="198" r="175" fill="url(#g)" opacity=".78"/>
+  <g fill="none" stroke="#f3bf31" filter="url(#glow)">
+    <circle cx="320" cy="198" r="145" stroke-width="4"/><circle cx="320" cy="198" r="111" stroke-width="3"/><circle cx="320" cy="198" r="78" stroke-width="3"/><circle cx="320" cy="198" r="46" stroke-width="2"/>
+    <path d="M320 24v348M146 198h348M195 75l250 250M445 75 195 325" stroke-width="2" stroke-dasharray="9 10" opacity=".8"/>
+  </g>
+  <g fill="#171512"><circle cx="320" cy="198" r="24"/><path d="M302 219h36l16 72h-68z"/><circle cx="320" cy="177" r="16"/></g>
+  <text x="30" y="45" fill="#fff" font-family="Impact,Arial Black,sans-serif" font-size="28">FIELD / SIMULATION</text>
+  <text x="460" y="350" fill="#f3bf31" font-family="Impact,Arial Black,sans-serif" font-size="24" transform="rotate(-4 460 350)">RADIA</text>
+  <path d="M440 335h150" stroke="#ec2f79" stroke-width="8"/>
+</svg>

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "n1",
+    "title": "実験アイデア：磁性体テープの応答",
+    "body": "磁場強度を変化させた時の挙動を記録し、周期形状との関係を比較する。",
+    "time": "10:42",
+    "pinned": true,
+    "color": "#6fd1d8",
+    "tag": "EXPERIMENT",
+    "projectId": "hts"
+  },
+  {
+    "id": "n2",
+    "title": "Radia Studio メモ",
+    "body": "線源モデルの境界条件とGmshへの表示方法を確認する。",
+    "time": "昨日",
+    "pinned": false,
+    "color": "#f7ce51",
+    "tag": "ANALYSIS",
+    "projectId": "hts"
+  },
+  {
+    "id": "n3",
+    "title": "文献メモ：Nature 2024",
+    "body": "テープ材料の新しい合成手法と既存手法の比較。",
+    "time": "2日前",
+    "pinned": false,
+    "color": "#f4a3c4",
+    "tag": "PAPER",
+    "projectId": "fusion"
+  },
+  {
+    "id": "n4",
+    "title": "次回ミーティングで話すこと",
+    "body": "データ共有フロー、巻線工程の安全確認、測定プローブの仕様。",
+    "time": "3日前",
+    "pinned": false,
+    "color": "#c6b8ee",
+    "tag": "MEETING",
+    "projectId": "hts"
+  },
+  {
+    "id": "n5",
+    "title": "UI構想：動きが内容を説明する",
+    "body": "発光だけでなく、リールなら回る、テープなら送られる。機能そのものを動きにする。",
+    "time": "今日",
+    "pinned": true,
+    "color": "#f4b56a",
+    "tag": "DESIGN",
+    "projectId": ""
+  }
+]

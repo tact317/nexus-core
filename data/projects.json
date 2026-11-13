@@ -1,0 +1,70 @@
+[
+  {
+    "id": "hts",
+    "name": "HTS Undulator Project",
+    "subtitle": "巻線・磁場解析・制御",
+    "progress": 72,
+    "color": "#2fb7cb",
+    "icon": "◎",
+    "toolIds": [
+      "trd-31",
+      "ptd-50",
+      "rps-09",
+      "ws-control"
+    ],
+    "pinned": true,
+    "nextAction": "巻線試験用の形状条件と測定手順を確定する",
+    "resources": [],
+    "createdAt": "2026-08-01T00:00:00+00:00",
+    "updatedAt": "2026-08-01T00:00:00+00:00"
+  },
+  {
+    "id": "particle",
+    "name": "Particle Tracking Study",
+    "subtitle": "イベントカメラ・AI",
+    "progress": 45,
+    "color": "#ec2f79",
+    "icon": "↻",
+    "toolIds": [
+      "mdi-10"
+    ],
+    "pinned": false,
+    "nextAction": "イベントデータから学習用候補を切り出す",
+    "resources": [],
+    "createdAt": "2026-08-01T00:00:00+00:00",
+    "updatedAt": "2026-08-01T00:00:00+00:00"
+  },
+  {
+    "id": "robot",
+    "name": "Modular Robot Development",
+    "subtitle": "GNN・構造探索",
+    "progress": 31,
+    "color": "#f3bf31",
+    "icon": "◇",
+    "toolIds": [
+      "mdi-10"
+    ],
+    "pinned": false,
+    "nextAction": "変形可能性判定モデルの入力仕様を固定する",
+    "resources": [],
+    "createdAt": "2026-08-01T00:00:00+00:00",
+    "updatedAt": "2026-08-01T00:00:00+00:00"
+  },
+  {
+    "id": "fusion",
+    "name": "Fusion Magnet Research",
+    "subtitle": "磁場・超伝導",
+    "progress": 18,
+    "color": "#39a879",
+    "icon": "∞",
+    "toolIds": [
+      "rps-09",
+      "ptr-01"
+    ],
+    "pinned": false,
+    "nextAction": "磁場モデルと会議資料を一つの参照先へまとめる",
+    "resources": [],
+    "createdAt": "2026-08-01T00:00:00+00:00",
+    "updatedAt": "2026-08-01T00:00:00+00:00"
+  }
+]

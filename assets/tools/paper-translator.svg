@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 390">
+  <rect width="640" height="390" fill="#dc6b35"/>
+  <path d="M0 290c160-82 291 57 430-15s170-54 250-22v137H0z" fill="#f3bf31" opacity=".42"/>
+  <g transform="translate(115 55)" stroke="#171512" stroke-width="8" stroke-linejoin="round">
+    <path d="M205 38C148 7 74 2 15 30v235c60-25 132-19 190 18z" fill="#f6f1e7"/>
+    <path d="M205 38c57-31 131-36 190-8v235c-60-25-132-19-190 18z" fill="#eee7da"/>
+    <path d="M205 38v245" fill="none"/>
+    <g stroke-width="5" opacity=".65"><path d="M48 84h114M48 115h126M48 146h98M48 177h124M248 83h110M248 114h126M248 145h103M248 176h119"/></g>
+  </g>
+  <text x="32" y="46" fill="#fff" font-family="Impact,Arial Black,sans-serif" font-size="28">PAPER / KNOWLEDGE</text>
+  <path d="M475 318l112-52" stroke="#fff" stroke-width="10"/><path d="M565 254l31 7-15 28" fill="none" stroke="#fff" stroke-width="8"/>
+</svg>
